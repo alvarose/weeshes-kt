@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "719046419448",
+    "project_id": "weeshes-test",
+    "storage_bucket": "weeshes-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719046419448:android:585e9c83cf743c88e66c0d",
+        "android_client_info": {
+          "package_name": "com.ase.weeshes.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719046419448-fgtbk8be89f4qtkrv1r4t6m2sgf0dmae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfwgekMZaVpbZv93ySq97IZ-UrOvEuvZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719046419448-fgtbk8be89f4qtkrv1r4t6m2sgf0dmae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
