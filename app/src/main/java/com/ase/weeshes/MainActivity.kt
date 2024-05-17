@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.ase.weeshes.ui.screens.wishlist.detail.WishlistScreen
+import com.ase.weeshes.ui.navigation.NavigationGraph
 import com.ase.weeshes.ui.theme.WeeshesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,8 +22,7 @@ class MainActivity : ComponentActivity() {
             WeeshesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
-//                        HomeScreen()
-                        WishlistScreen()
+                        NavigationGraph()
                     }
                 }
             }

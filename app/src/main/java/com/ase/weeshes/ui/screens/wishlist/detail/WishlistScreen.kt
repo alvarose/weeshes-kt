@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,17 +47,21 @@ import com.ase.weeshes.ui.theme.LightColor
 @Composable
 fun WishlistScreen(
     viewModel: WishlistViewModel = hiltViewModel(),
+    onBack: () -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        val wishlist = wishlistData[0]
-        TitleLarge(text = "${wishlist.icon} ${wishlist.name}")
-        WishlistView(wishlist = wishlistData[0])
+    val uiState by viewModel.uiState.collectAsState()
+
+    uiState.wishlist?.let { wishlist ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            TitleLarge(text = "${wishlist.icon} ${wishlist.name}")
+            WishlistView(wishlist)
+        }
     }
 }
 
@@ -149,5 +154,5 @@ private fun ProductItem(
 @Composable
 @Preview(showBackground = true)
 fun WishlistScreenPreview() {
-    WishlistScreen()
+    WishlistScreen {}
 }
