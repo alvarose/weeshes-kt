@@ -172,9 +172,3 @@ private fun ProductItem(
         Icon(imageVector = Icons.AutoMirrored.Rounded.ExitToApp, tint = LightColor, modifier = Modifier.size(18.dp), contentDescription = null)
     }
 }
-
-@Composable
-@Preview(showBackground = true)
-fun WishlistScreenPreview() {
-    WishlistScreen {}
-}

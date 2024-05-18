@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -64,6 +66,7 @@ fun CategoriesScreen(
     AddCategoryDialog(showDialog,
         onSaveClick = { name, icon ->
             viewModel.addCategory(name, icon)
+            showDialog = false
         }
     ) { showDialog = false }
 
@@ -155,26 +158,36 @@ fun AddCategoryDialog(
                 ) {
                     TitleLarge(text = "Nueva categoría")
 
-                    var name by remember { mutableStateOf("Boda") }
+                    var name by remember { mutableStateOf("") }
                     var icon by remember { mutableStateOf("\uD83D\uDC92") }
 
-                    TextField(
-                        value = name,
-                        onValueChange = { newText ->
-                            name = newText
-                        },
-                        placeholder = { Text(text = "Nombre") },
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier.fillMaxWidth()
-                    )
+                    ) {
+                        TextField(
+                            value = name,
+                            onValueChange = { newText ->
+                                name = newText.trim()
+                            },
+                            placeholder = { Text(text = "Nombre") },
+                            modifier = Modifier.weight(2f)
+                        )
 
-                    TextField(
-                        value = icon,
-                        onValueChange = { newText ->
-                            icon = newText
-                        },
-                        placeholder = { Text(text = "Icon") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                        TextField(
+                            value = icon,
+                            onValueChange = { emoji ->
+                                if (icon.isEmpty() && emoji.isNotEmpty()) {
+                                    val filter = emoji.filter { Character.getType(it) == 19 }
+                                    icon = filter.ifEmpty { "" }
+                                } else if (emoji.isEmpty()) icon = ""
+                            },
+                            maxLines = 1,
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+                            placeholder = { Text(text = "Icon") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
                     Button(onClick = { onSaveClick(name, icon) }) {
                         Text(text = "Guardar")
