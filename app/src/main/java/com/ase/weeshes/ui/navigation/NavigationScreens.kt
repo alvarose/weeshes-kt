@@ -9,4 +9,7 @@ sealed class NavigationScreens() {
 
     @Serializable
     data class WishlistDetail(val wishlistId: String)
+
+    @Serializable
+    object Categories
 }

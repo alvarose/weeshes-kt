@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ase.weeshes.ui.screens.categories.CategoriesScreen
 import com.ase.weeshes.ui.screens.home.HomeScreen
-import com.ase.weeshes.ui.screens.wishlist.detail.WishlistScreen
+import com.ase.weeshes.ui.screens.wishlist.WishlistScreen
 
 @Composable
 fun NavigationGraph() {
@@ -16,13 +17,24 @@ fun NavigationGraph() {
         startDestination = NavigationScreens.Home
     ) {
         composable<NavigationScreens.Home> {
-            HomeScreen { wishlist ->
-                navController.navigate(NavigationScreens.WishlistDetail(wishlist.id))
-            }
+            HomeScreen(
+                onWishlistClick = { wishlist ->
+                    navController.navigate(NavigationScreens.WishlistDetail(wishlist.id))
+                },
+                onCategoriesClick = {
+                    navController.navigate(NavigationScreens.Categories)
+                }
+            )
         }
 
         composable<NavigationScreens.WishlistDetail> {
             WishlistScreen {
+                navController.popBackStack()
+            }
+        }
+
+        composable<NavigationScreens.Categories> {
+            CategoriesScreen {
                 navController.popBackStack()
             }
         }

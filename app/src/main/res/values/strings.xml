@@ -2,7 +2,8 @@
     <string name="app_name">Weeshes</string>
 
     <!-- Titles -->
-    <string name="my_weeshes">My Weeshes</string>
-    <string name="test_list">Lista de Navidad</string>
+    <string name="title_my_weeshes">Mis Weeshes</string>
+    <string name="title_categories">Categorías</string>
+    <string name="error">Error</string>
 
 </resources>
