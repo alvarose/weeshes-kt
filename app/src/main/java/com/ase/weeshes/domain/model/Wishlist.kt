@@ -6,9 +6,4 @@ data class Wishlist(
     val description: String? = null,
     val icon: String,
     val products: List<Product> = emptyList(),
-) {
-    fun toRequest() = hashMapOf(
-        "name" to name,
-        "icon" to icon
-    )
-}
+)

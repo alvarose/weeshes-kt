@@ -1,5 +1,6 @@
 package com.ase.weeshes.data.network.response
 
+import com.ase.weeshes.domain.model.Product
 import com.ase.weeshes.domain.model.Wishlist
 
 data class WishlistsResponse(
@@ -7,9 +8,10 @@ data class WishlistsResponse(
     val name: String = "",
     val icon: String = "",
 ) {
-    fun toDomain(): Wishlist = Wishlist(
+    fun toDomain(products: List<Product> = emptyList()): Wishlist = Wishlist(
         id = id,
         name = name,
-        icon = icon
+        icon = icon,
+        products = products
     )
 }

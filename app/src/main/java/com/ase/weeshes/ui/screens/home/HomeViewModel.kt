@@ -1,10 +1,10 @@
 package com.ase.weeshes.ui.screens.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ase.weeshes.domain.model.Wishlist
-import com.ase.weeshes.domain.usecase.GetWishlistsUseCase
+import com.ase.weeshes.domain.usecase.wishlists.CreateWishlistUseCase
+import com.ase.weeshes.domain.usecase.wishlists.GetWishlistsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val getWishlists: GetWishlistsUseCase,
+    private val createWishlist: CreateWishlistUseCase,
 ) : ViewModel() {
 
     private var _uiState = MutableStateFlow(HomeUiState())
@@ -31,6 +32,12 @@ class HomeScreenViewModel @Inject constructor(
                     it.copy(wishlists = wishlists)
                 }
             }
+        }
+    }
+
+    fun addWishlist(name: String, icon: String) {
+        viewModelScope.launch {
+            createWishlist(name, icon)
         }
     }
 }
