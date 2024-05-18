@@ -1,26 +1,186 @@
 package com.ase.weeshes.ui.screens.categories
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ase.weeshes.R
-import com.ase.weeshes.core.wishlistData
+import com.ase.weeshes.domain.model.Category
+import com.ase.weeshes.ui.components.nav.MainScaffold
+import com.ase.weeshes.ui.components.nav.TopBarTitle
 import com.ase.weeshes.ui.components.ui.TitleLarge
+import com.ase.weeshes.ui.screens.home.AddWishlistDialog
+import com.ase.weeshes.ui.theme.FontColor
+import com.ase.weeshes.ui.theme.LightColor
 
 @Composable
 fun CategoriesScreen(
     viewModel: CategoriesViewModel = hiltViewModel(),
+    onBack: () -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+    val uiState by viewModel.uiState.collectAsState()
+    val listState = rememberLazyListState()
+    var showDialog by remember { mutableStateOf(false) }
+
+    AddCategoryDialog(showDialog,
+        onSaveClick = { name, icon ->
+            viewModel.addCategory(name, icon)
+        }
+    ) { showDialog = false }
+
+    MainScaffold(
+        title = TopBarTitle.Resource(R.string.title_categories),
+        navIcon = {
+            IconButton(onClick = { onBack() }) {
+                Icon(imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null)
+            }
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showDialog = true }) {
+                Icon(imageVector = Icons.Rounded.Add, tint = FontColor, contentDescription = null)
+            }
+        }
+    ) { padding ->
+        LazyColumn(
+            state = listState,
+            contentPadding = padding,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            items(uiState.categories, key = { c -> c.id }) { category ->
+                CategoryView(category)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategoryView(
+    category: Category,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
+            .border(1.dp, LightColor, RoundedCornerShape(12.dp))
             .padding(16.dp)
     ) {
+        Text(
+            text = category.icon, style = TextStyle(
+                fontSize = 20.sp
+            )
+        )
+        Text(
+            text = category.name, style = TextStyle(
+                color = FontColor,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            ), modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+fun AddCategoryDialog(
+    showDialog: Boolean,
+    onSaveClick: (String, String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = onDismissRequest,
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .pointerInput(Unit) { detectTapGestures { } }
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(16.dp)
+                ) {
+                    TitleLarge(text = "Nueva categoría")
+
+                    var name by remember { mutableStateOf("Boda") }
+                    var icon by remember { mutableStateOf("\uD83D\uDC92") }
+
+                    TextField(
+                        value = name,
+                        onValueChange = { newText ->
+                            name = newText
+                        },
+                        placeholder = { Text(text = "Nombre") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    TextField(
+                        value = icon,
+                        onValueChange = { newText ->
+                            icon = newText
+                        },
+                        placeholder = { Text(text = "Icon") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Button(onClick = { onSaveClick(name, icon) }) {
+                        Text(text = "Guardar")
+                    }
+                }
+            }
+        }
     }
 }
