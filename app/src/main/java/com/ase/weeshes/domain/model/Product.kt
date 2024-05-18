@@ -4,5 +4,5 @@ data class Product(
     val id: String,
     val name: String,
     val link: String,
-    val categoryId: String,
+    val category: String,
 )
