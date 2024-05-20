@@ -1,6 +1,6 @@
 package com.ase.weeshes.data.network.requests
 
-fun NewCategoryRequest(
+fun newCategoryRequest(
     id: String,
     name: String,
     icon: String,

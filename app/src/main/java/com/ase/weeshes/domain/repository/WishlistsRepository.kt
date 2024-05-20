@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface WishlistsRepository {
 
-    suspend fun createWishlist(name: String, icon: String)
+    suspend fun createWishlist(name: String, icon: String): Boolean
 
     suspend fun getWishlists(): Flow<List<Wishlist>>
 

@@ -17,13 +17,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,13 +50,14 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ase.weeshes.R
+import com.ase.weeshes.core.ex.toast
 import com.ase.weeshes.domain.model.Category
 import com.ase.weeshes.ui.components.nav.MainScaffold
 import com.ase.weeshes.ui.components.nav.TopBarTitle
 import com.ase.weeshes.ui.components.ui.TitleLarge
-import com.ase.weeshes.ui.screens.home.AddWishlistDialog
 import com.ase.weeshes.ui.theme.FontColor
 import com.ase.weeshes.ui.theme.LightColor
+import com.ase.weeshes.ui.theme.LightRed
 
 @Composable
 fun CategoriesScreen(
@@ -61,14 +66,28 @@ fun CategoriesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
-    var showDialog by remember { mutableStateOf(false) }
 
-    AddCategoryDialog(showDialog,
+    var showAddDialog by remember { mutableStateOf(false) }
+
+    var categoryToDelete by remember { mutableStateOf<Category?>(null) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    AddCategoryDialog(showAddDialog,
         onSaveClick = { name, icon ->
             viewModel.addCategory(name, icon)
-            showDialog = false
+            showAddDialog = false
         }
-    ) { showDialog = false }
+    ) { showAddDialog = false }
+
+    categoryToDelete?.let { category ->
+        DeleteCategoryDialog(showDeleteDialog,
+            category,
+            onDeleteClick = { id ->
+                viewModel.deleteCategory(id)
+                showDeleteDialog = false
+            }
+        ) { showDeleteDialog = false }
+    }
 
     MainScaffold(
         title = TopBarTitle.Resource(R.string.title_categories),
@@ -78,21 +97,27 @@ fun CategoriesScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
+            FloatingActionButton(onClick = { showAddDialog = true }) {
                 Icon(imageVector = Icons.Rounded.Add, tint = FontColor, contentDescription = null)
             }
         }
     ) { padding ->
-        LazyColumn(
-            state = listState,
-            contentPadding = padding,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            items(uiState.categories, key = { c -> c.id }) { category ->
-                CategoryView(category)
+        Column(Modifier.padding(horizontal = 16.dp, vertical = (padding.calculateTopPadding() + 16.dp))) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White)
+                    .border(1.dp, LightColor, RoundedCornerShape(12.dp))
+            ) {
+                items(uiState.categories, key = { c -> c.id }) { category ->
+                    CategoryView(category) {
+                        categoryToDelete = category
+                        showDeleteDialog = true
+                    }
+                    HorizontalDivider(thickness = 1.dp, color = LightColor)
+                }
             }
         }
     }
@@ -101,16 +126,14 @@ fun CategoriesScreen(
 @Composable
 private fun CategoryView(
     category: Category,
+    onDeleteClick: (Category) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.White)
-            .border(1.dp, LightColor, RoundedCornerShape(12.dp))
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text(
             text = category.icon, style = TextStyle(
@@ -124,11 +147,14 @@ private fun CategoryView(
                 fontSize = 16.sp
             ), modifier = Modifier.weight(1f)
         )
+        IconButton(onClick = { onDeleteClick(category) }) {
+            Icon(imageVector = Icons.Rounded.Delete, contentDescription = null, tint = LightRed)
+        }
     }
 }
 
 @Composable
-fun AddCategoryDialog(
+private fun AddCategoryDialog(
     showDialog: Boolean,
     onSaveClick: (String, String) -> Unit,
     onDismissRequest: () -> Unit,
@@ -195,5 +221,45 @@ fun AddCategoryDialog(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DeleteCategoryDialog(
+    showDialog: Boolean,
+    category: Category,
+    onDeleteClick: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    if (showDialog) {
+        AlertDialog(
+            title = {
+                Text(text = "${category.icon} ${category.name}", textAlign = TextAlign.Start, modifier = Modifier.fillMaxWidth())
+            },
+            text = {
+                Text(text = "¿Estás seguro de eliminar esta categoría?")
+            },
+            onDismissRequest = {
+                onDismissRequest()
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDeleteClick(category.id)
+                    }
+                ) {
+                    Text("Eliminar")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        onDismissRequest()
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+            }
+        )
     }
 }

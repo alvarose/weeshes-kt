@@ -7,7 +7,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 class ProductsController @Inject constructor(private val firestore: FirebaseFirestore) : ProductsRepository {
-    override suspend fun createProduct(wishlistId: String, name: String, link: String, category: String) {
+
+    override suspend fun createProduct(wishlistId: String, name: String, link: String, category: String): Boolean {
         val ref = firestore.collection(FirestoreValues.WEESHES_COLL)
             .document(FirestoreValues.USER_ID)
             .collection(FirestoreValues.WISHLISTS_COLL)
@@ -15,6 +16,6 @@ class ProductsController @Inject constructor(private val firestore: FirebaseFire
             .collection(FirestoreValues.PRODUCTS_COLL)
             .document()
 
-        ref.set(newProductRequest(ref.id, name, link, category)).isSuccessful
+        return ref.set(newProductRequest(ref.id, name, link, category)).isSuccessful
     }
 }

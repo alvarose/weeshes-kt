@@ -20,12 +20,12 @@ import javax.inject.Inject
 
 class WishlistsController @Inject constructor(private val firestore: FirebaseFirestore) : WishlistsRepository {
 
-    override suspend fun createWishlist(name: String, icon: String) {
+    override suspend fun createWishlist(name: String, icon: String): Boolean {
         val ref = firestore.collection(FirestoreValues.WEESHES_COLL)
             .document(FirestoreValues.USER_ID)
             .collection(FirestoreValues.WISHLISTS_COLL)
             .document()
-        ref.set(newWishlistRequest(ref.id, name, icon)).isSuccessful
+        return ref.set(newWishlistRequest(ref.id, name, icon)).isSuccessful
     }
 
     override suspend fun getWishlists(): Flow<List<Wishlist>> = firestore

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ase.weeshes.domain.model.Category
 import com.ase.weeshes.domain.usecase.categories.CreateCategoryUseCase
+import com.ase.weeshes.domain.usecase.categories.DeleteCategoryUseCase
 import com.ase.weeshes.domain.usecase.categories.GetCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class CategoriesViewModel @Inject constructor(
     private val getCategories: GetCategoriesUseCase,
     private val createCategory: CreateCategoryUseCase,
+    private val delCategory: DeleteCategoryUseCase,
 ) : ViewModel() {
 
     private var _uiState = MutableStateFlow(CategoriesUiState())
@@ -38,6 +40,12 @@ class CategoriesViewModel @Inject constructor(
     fun addCategory(name: String, icon: String) {
         viewModelScope.launch {
             createCategory(name, icon)
+        }
+    }
+
+    fun deleteCategory(id: String) {
+        viewModelScope.launch {
+            delCategory(id)
         }
     }
 }
