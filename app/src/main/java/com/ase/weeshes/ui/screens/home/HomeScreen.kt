@@ -133,7 +133,7 @@ private fun WheeshesView(
 }
 
 @Composable
-fun AddWishlistDialog(
+private fun AddWishlistDialog(
     showDialog: Boolean,
     onSaveClick: (String, String) -> Unit,
     onDismissRequest: () -> Unit,

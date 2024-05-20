@@ -15,3 +15,5 @@ val BackgroundAppColor = Color(0xFFf7f8fc)
 val FontColor = Color(0xB32f3c59)
 val FontColorDark = Color(0xFF2f3c59)
 val LightColor = Color(0xFFe5e8f5)
+
+val LightRed = Color(0xFFf17171)
