@@ -126,8 +126,10 @@ private fun WishlistView(
                 .background(Color.White)
                 .border(1.dp, LightColor, RoundedCornerShape(12.dp))
         ) {
-            SectionTitle(categories.find { it.id == categoryId }!!, isExpanded = isExpanded) {
-                isExpanded = !isExpanded
+            if (categoryId.isNotEmpty()) {
+                SectionTitle(categories.find { it.id == categoryId }!!, isExpanded = isExpanded) {
+                    isExpanded = !isExpanded
+                }
             }
 
             if (isExpanded) {
