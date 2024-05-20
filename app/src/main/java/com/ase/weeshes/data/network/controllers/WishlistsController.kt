@@ -1,6 +1,7 @@
 package com.ase.weeshes.data.network.controllers
 
-import com.ase.weeshes.data.network.requests.NewWishlistRequest
+import com.ase.weeshes.core.firebase.FirestoreValues
+import com.ase.weeshes.data.network.requests.newWishlistRequest
 import com.ase.weeshes.data.network.response.ProductsResponse
 import com.ase.weeshes.data.network.response.WishlistsResponse
 import com.ase.weeshes.domain.model.Product
@@ -19,25 +20,18 @@ import javax.inject.Inject
 
 class WishlistsController @Inject constructor(private val firestore: FirebaseFirestore) : WishlistsRepository {
 
-    companion object {
-        const val USER_ID = "PeRi3uhriXGNItZWa2Mh"
-        const val WEESHES = "weeshes"
-        const val WISHLIST = "wishlists"
-        const val PRODUCTS = "products"
-    }
-
     override suspend fun createWishlist(name: String, icon: String) {
-        val ref = firestore.collection(WEESHES)
-            .document(USER_ID)
-            .collection(WISHLIST)
+        val ref = firestore.collection(FirestoreValues.WEESHES_COLL)
+            .document(FirestoreValues.USER_ID)
+            .collection(FirestoreValues.WISHLISTS_COLL)
             .document()
-        ref.set(NewWishlistRequest(ref.id, name, icon)).isSuccessful
+        ref.set(newWishlistRequest(ref.id, name, icon)).isSuccessful
     }
 
     override suspend fun getWishlists(): Flow<List<Wishlist>> = firestore
-        .collection(WEESHES)
-        .document(USER_ID)
-        .collection(WISHLIST)
+        .collection(FirestoreValues.WEESHES_COLL)
+        .document(FirestoreValues.USER_ID)
+        .collection(FirestoreValues.WISHLISTS_COLL)
         .orderBy("id", Query.Direction.ASCENDING)
         .snapshots()
         .map {
@@ -46,9 +40,9 @@ class WishlistsController @Inject constructor(private val firestore: FirebaseFir
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getWishlistById(id: String): Flow<Wishlist?> = firestore
-        .collection(WEESHES)
-        .document(USER_ID)
-        .collection(WISHLIST)
+        .collection(FirestoreValues.WEESHES_COLL)
+        .document(FirestoreValues.USER_ID)
+        .collection(FirestoreValues.WISHLISTS_COLL)
         .document(id)
         .snapshots()
         .map {
@@ -60,11 +54,11 @@ class WishlistsController @Inject constructor(private val firestore: FirebaseFir
         }
 
     override suspend fun getProducts(wishlistId: String): Flow<List<Product>> = firestore
-        .collection(WEESHES)
-        .document(USER_ID)
-        .collection(WISHLIST)
+        .collection(FirestoreValues.WEESHES_COLL)
+        .document(FirestoreValues.USER_ID)
+        .collection(FirestoreValues.WISHLISTS_COLL)
         .document(wishlistId)
-        .collection(PRODUCTS)
+        .collection(FirestoreValues.PRODUCTS_COLL)
         .snapshots()
         .map {
             it.toObjects<ProductsResponse>().map { w -> w.toDomain() }

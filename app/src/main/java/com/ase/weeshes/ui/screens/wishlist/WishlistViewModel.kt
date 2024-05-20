@@ -1,6 +1,5 @@
 package com.ase.weeshes.ui.screens.wishlist
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +7,7 @@ import androidx.navigation.toRoute
 import com.ase.weeshes.domain.model.Category
 import com.ase.weeshes.domain.model.Wishlist
 import com.ase.weeshes.domain.usecase.categories.GetCategoriesUseCase
+import com.ase.weeshes.domain.usecase.products.CreateProductUseCase
 import com.ase.weeshes.domain.usecase.wishlists.GetWishlistByIdUseCase
 import com.ase.weeshes.ui.navigation.NavigationScreens
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +22,7 @@ class WishlistViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val findWishlistById: GetWishlistByIdUseCase,
     private val getCategories: GetCategoriesUseCase,
+    private val createProduct: CreateProductUseCase,
 ) : ViewModel() {
 
     private var _uiState = MutableStateFlow(WishlistDetailUiState())
@@ -45,13 +46,18 @@ class WishlistViewModel @Inject constructor(
     }
 
     private fun retrieveWishlist() {
-        Log.i("CACA", routeData.wishlistId)
         viewModelScope.launch {
             findWishlistById(routeData.wishlistId).collect { wishlist ->
                 _uiState.update {
                     it.copy(wishlist = wishlist)
                 }
             }
+        }
+    }
+
+    fun addProduct(wishlistId: String, name: String, link: String, category: String) {
+        viewModelScope.launch {
+            createProduct(wishlistId, name, link, category)
         }
     }
 }

@@ -1,12 +1,14 @@
 package com.ase.weeshes.data.network.requests
 
-fun newWishlistRequest(
+fun newProductRequest(
     id: String,
     name: String,
-    icon: String,
+    link: String,
+    category: String,
 ) = hashMapOf(
     "id" to id,
     "name" to name,
-    "icon" to icon
+    "link" to link,
+    "category" to category
 )
 
