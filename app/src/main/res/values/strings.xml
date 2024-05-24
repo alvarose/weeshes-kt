@@ -6,4 +6,7 @@
     <string name="title_categories">Categorías</string>
     <string name="error">Error</string>
 
+    <string name="wishlist_share_text">🎁 Lista de deseos\n🔗 http://weesh.es/%1$s</string>
+
+
 </resources>

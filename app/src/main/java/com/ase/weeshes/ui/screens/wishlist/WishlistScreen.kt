@@ -1,5 +1,6 @@
 package com.ase.weeshes.ui.screens.wishlist
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,15 +22,19 @@ import androidx.compose.material.icons.automirrored.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -44,6 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ase.weeshes.R
 import com.ase.weeshes.domain.model.Category
 import com.ase.weeshes.domain.model.Product
 import com.ase.weeshes.domain.model.Wishlist
@@ -59,6 +66,7 @@ import com.ase.weeshes.ui.components.nav.MainScaffold
 import com.ase.weeshes.ui.components.nav.TopBarTitle
 import com.ase.weeshes.ui.components.ui.TitleLarge
 import com.ase.weeshes.ui.theme.FontColor
+import com.ase.weeshes.ui.theme.FontColorDark
 import com.ase.weeshes.ui.theme.LightColor
 
 @Composable
@@ -66,6 +74,7 @@ fun WishlistScreen(
     viewModel: WishlistViewModel = hiltViewModel(),
     onBack: () -> Unit,
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
@@ -84,9 +93,45 @@ fun WishlistScreen(
                     Icon(imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null)
                 }
             },
+            actions = {
+                var expanded by remember { mutableStateOf(false) }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
+                    DropdownMenuItem(text = { Text(text = "Editar") }, onClick = {})
+                    DropdownMenuItem(text = { Text(text = "Eliminar") }, onClick = {})
+                }
+            },
             floatingActionButton = {
-                FloatingActionButton(onClick = { showDialog = true }) {
-                    Icon(imageVector = Icons.Rounded.Add, tint = FontColor, contentDescription = null)
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    SmallFloatingActionButton(
+                        onClick = {
+                            context.startActivity(Intent.createChooser(Intent().apply {
+                                action = Intent.ACTION_SEND
+                                val shareText: String = String.format(context.getString(R.string.wishlist_share_text), wishlist.id)
+                                putExtra(Intent.EXTRA_TEXT, shareText)
+                                type = "text/plain"
+                            }, null))
+                        },
+                        contentColor = FontColorDark,
+                        elevation = FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 2.dp
+                        )
+                    ) {
+                        Icon(imageVector = Icons.Rounded.Share, contentDescription = null)
+                    }
+                    FloatingActionButton(
+                        onClick = { showDialog = true },
+                        contentColor = FontColorDark,
+                        elevation = FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 3.dp
+                        )
+                    ) {
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+                    }
                 }
             }
         ) { padding ->
