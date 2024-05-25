@@ -1,7 +1,7 @@
 package com.ase.weeshes.domain.usecase.app
 
 import com.ase.weeshes.core.ex.toLog
-import com.ase.weeshes.domain.repository.firebase.RemoteConfigRepository
+import com.ase.weeshes.domain.repository.RemoteConfigRepository
 import javax.inject.Inject
 
 class CanAccessToApp @Inject constructor(private val repository: RemoteConfigRepository) {

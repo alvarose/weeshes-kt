@@ -1,4 +1,4 @@
-package com.ase.weeshes.domain.repository.firebase
+package com.ase.weeshes.domain.repository
 
 interface RemoteConfigRepository {
     fun getAppVersion(): Int

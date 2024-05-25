@@ -1,10 +1,10 @@
-package com.ase.weeshes.data.network.controllers.firebase
+package com.ase.weeshes.data.network.controllers
 
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.ase.weeshes.core.firebase.RemoteConfigValues
-import com.ase.weeshes.domain.repository.firebase.RemoteConfigRepository
+import com.ase.weeshes.domain.repository.RemoteConfigRepository
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject

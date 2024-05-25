@@ -1,4 +1,4 @@
-package com.ase.weeshes.ui.screens.wishlist
+package com.ase.weeshes.ui.screens.home.wishlist
 
 import android.content.Intent
 import androidx.compose.foundation.background
