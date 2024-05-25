@@ -3,16 +3,16 @@ package com.ase.weeshes.ui.navigation
 import kotlinx.serialization.Serializable
 
 
-sealed class NavigationScreens() {
+sealed class NavigationScreens {
     @Serializable
-    object Home
+    data object Home : NavigationScreens()
 
     @Serializable
-    object Auth
+    data object Auth : NavigationScreens()
 
     @Serializable
-    data class WishlistDetail(val wishlistId: String)
+    data class WishlistDetail(val wishlistId: String) : NavigationScreens()
 
     @Serializable
-    object Categories
+    data object Categories : NavigationScreens()
 }

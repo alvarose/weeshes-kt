@@ -9,4 +9,7 @@ import javax.inject.Inject
 class AuthController @Inject constructor(private val auth: FirebaseAuth) : AuthRepository {
     override suspend fun login(email: String, pass: String): FirebaseUser? = auth.signInWithEmailAndPassword(email, pass).await().user
     override suspend fun signUp(name: String, email: String, pass: String): FirebaseUser? = auth.createUserWithEmailAndPassword(email, pass).await().user
+    override fun isLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
 }
