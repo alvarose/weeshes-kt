@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.auth.ktx)
 
     // Dagger Hilt
     implementation(libs.dagger.hilt)

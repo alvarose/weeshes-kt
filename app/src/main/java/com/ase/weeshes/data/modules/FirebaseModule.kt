@@ -2,6 +2,7 @@ package com.ase.weeshes.data.modules
 
 import com.ase.weeshes.R
 import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -23,6 +24,10 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun provideFirebaseFirestore() = Firebase.firestore
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth() = Firebase.auth
 
     @Provides
     @Singleton

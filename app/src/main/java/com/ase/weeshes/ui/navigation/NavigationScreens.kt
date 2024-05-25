@@ -8,6 +8,9 @@ sealed class NavigationScreens() {
     object Home
 
     @Serializable
+    object Auth
+
+    @Serializable
     data class WishlistDetail(val wishlistId: String)
 
     @Serializable
