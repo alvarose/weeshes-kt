@@ -11,6 +11,9 @@ sealed class NavigationScreens {
     data object Auth : NavigationScreens()
 
     @Serializable
+    data object Version : NavigationScreens()
+
+    @Serializable
     data class WishlistDetail(val wishlistId: String) : NavigationScreens()
 
     @Serializable

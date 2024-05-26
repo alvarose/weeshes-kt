@@ -87,6 +87,9 @@ dependencies {
     implementation(libs.firebase.config.ktx)
     implementation(libs.firebase.auth.ktx)
 
+    // Google
+    implementation(libs.google.auth)
+
     // Dagger Hilt
     implementation(libs.dagger.hilt)
     implementation(libs.dagger.navigation)

@@ -1,4 +1,4 @@
-package com.ase.weeshes.ui.screens.home.wishlist
+package com.ase.weeshes.ui.screens.wishlist
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

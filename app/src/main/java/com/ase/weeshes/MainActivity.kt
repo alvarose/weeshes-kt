@@ -20,14 +20,13 @@ class MainActivity : ComponentActivity() {
     private val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 splashViewModel.isSplashShow.value
             }
         }
-
-        super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
         setContent {

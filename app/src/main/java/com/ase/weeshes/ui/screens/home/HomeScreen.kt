@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.rounded.ExitToApp
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Button
@@ -60,6 +61,7 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
     onWishlistClick: (Wishlist) -> Unit,
     onCategoriesClick: () -> Unit,
+    onLoggedOut: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
@@ -75,6 +77,9 @@ fun HomeScreen(
     MainScaffold(
         title = TopBarTitle.Resource(R.string.title_my_weeshes),
         actions = {
+            IconButton(onClick = { viewModel.logout { onLoggedOut() } }) {
+                Icon(imageVector = Icons.AutoMirrored.Rounded.ExitToApp, tint = FontColor, contentDescription = null)
+            }
             IconButton(onClick = { onCategoriesClick() }) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.List, tint = FontColor, contentDescription = null)
             }

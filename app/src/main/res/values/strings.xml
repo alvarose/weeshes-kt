@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Weeshes</string>
+    <string name="app_token">Weeshes</string>
 
     <!-- Titles -->
     <string name="title_my_weeshes">Mis Weeshes</string>
