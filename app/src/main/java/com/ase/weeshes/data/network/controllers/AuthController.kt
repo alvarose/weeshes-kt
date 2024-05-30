@@ -19,7 +19,7 @@ class AuthController @Inject constructor(private val auth: FirebaseAuth) : AuthR
 
     override suspend fun userUid(): String = auth.currentUser?.uid ?: ""
 
-    override suspend fun isLoggedIn(): Boolean = auth.currentUser == null
+    override suspend fun isLoggedIn(): Boolean = auth.currentUser != null
 
     override suspend fun logout() = auth.signOut()
 

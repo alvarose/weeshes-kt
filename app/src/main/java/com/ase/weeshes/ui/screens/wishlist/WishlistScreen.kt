@@ -1,6 +1,7 @@
 package com.ase.weeshes.ui.screens.wishlist
 
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -45,14 +46,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -135,19 +139,42 @@ fun WishlistScreen(
                 }
             }
         ) { padding ->
-            Column(
+            Box(
                 Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .verticalScroll(rememberScrollState())
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    WishlistView(wishlist, uiState.categories)
+                if (wishlist.products.isNotEmpty()) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        WishlistView(wishlist, uiState.categories)
+                    }
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(horizontal = 24.dp)
+                    ) {
+                        Image(painter = painterResource(R.drawable.img_wishlist), contentDescription = null, modifier = Modifier.size(112.dp).alpha(0.5f))
+                        Text(
+                            text = "Aún no tienes ningun producto.\n¡Prueba a añadir uno!",
+                            style = TextStyle(
+                                color = FontColor,
+                                fontSize = 18.sp,
+                                lineHeight = 24.sp,
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            textAlign = TextAlign.Center,
+
+                            )
+                    }
                 }
             }
         }
@@ -243,7 +270,7 @@ private fun ProductItem(
                 fontSize = 16.sp
             ), modifier = Modifier.weight(1f)
         )
-        Icon(imageVector = Icons.AutoMirrored.Rounded.ExitToApp, tint = LightColor, modifier = Modifier.size(18.dp), contentDescription = null)
+        Icon(imageVector = Icons.AutoMirrored.Rounded.ExitToApp, tint = FontColor.copy(0.3f), modifier = Modifier.size(18.dp), contentDescription = null)
     }
 }
 

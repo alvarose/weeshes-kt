@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen().apply {
             setKeepOnScreenCondition {
-                splashViewModel.isSplashShow.value
+                splashViewModel.startDestination.value != null
             }
         }
 
